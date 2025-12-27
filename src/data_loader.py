@@ -1,26 +1,24 @@
-import yfinance as yf
 import pandas as pd
+import os
 
 
 def download_price_data(tickers, start_date, end_date):
-    data = yf.download(
-        tickers,
-        start=start_date,
-        end=end_date,
-        progress=False,
-        auto_adjust=True,
-    )
+    cache_file = "data/prices.csv"
 
-    if isinstance(data.columns, pd.MultiIndex):
-        prices = data["Close"]
-    else:
-        prices = data
+    if not os.path.exists(cache_file):
+        raise FileNotFoundError(
+            "prices.csv not found. Please place it in the data/ directory."
+        )
+
+    prices = pd.read_csv(
+        cache_file,
+        index_col=0,
+        parse_dates=True
+    )
 
     return prices
 
 
 def load_and_prepare_data(tickers, start_date, end_date):
     prices = download_price_data(tickers, start_date, end_date)
-    prices = prices.ffill()
-    prices = prices.dropna()
-    return prices
+    return prices.ffill()
