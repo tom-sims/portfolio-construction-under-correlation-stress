@@ -1,23 +1,22 @@
-import pandas as pd
 import os
+import pandas as pd
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_PATH = os.path.join(PROJECT_ROOT, "data", "prices.csv")
 
 def download_price_data(tickers, start_date, end_date):
-    cache_file = "data/prices.csv"
-
-    if not os.path.exists(cache_file):
+    if not os.path.exists(DATA_PATH):
         raise FileNotFoundError(
-            "prices.csv not found. Please place it in the data/ directory."
+            f"prices.csv not found at {DATA_PATH}. Please place it in the data/ directory."
         )
 
     prices = pd.read_csv(
-        cache_file,
+        DATA_PATH,
         index_col=0,
         parse_dates=True
     )
 
     return prices
-
 
 def load_and_prepare_data(tickers, start_date, end_date):
     prices = download_price_data(tickers, start_date, end_date)

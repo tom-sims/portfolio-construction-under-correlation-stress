@@ -50,8 +50,7 @@ def risk_parity_portfolio(returns):
 
     return pd.Series(result.x, index=returns.columns)
 
-
-def volatility_targeted_portfolio(returns, target_vol=0.10, periods_per_year=252):
+def volatility_targeted_portfolio(returns, target_vol=0.10, periods_per_year=252, avg_corr=None):
     vol = returns.std() * np.sqrt(periods_per_year)
     inv_vol = 1 / vol
     weights = inv_vol / inv_vol.sum()
